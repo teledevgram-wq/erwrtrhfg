@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Медиа админ | заявки + админка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #0d1b2a 0%, #1b3b4f 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            max-width: 700px;
+            width: 100%;
+            background: #f5f9ff;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 30, 50, 0.5), 0 0 0 2px #ffb347 inset, 0 0 0 4px #3aa8ff inset;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ff7b00, #0077be);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sub {
+            text-align: center;
+            font-weight: 600;
+            color: #0a3144;
+            background: #ffdead;
+            padding: 12px 20px;
+            border-radius: 60px;
+            margin-bottom: 30px;
+            border: 2px solid #ff8c42;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            background: rgba(255, 190, 80, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid #ffa500;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .form-group label {
+            font-weight: 700;
+            min-width: 140px;
+            color: #003153;
+            font-size: 1.1rem;
+        }
+        .form-group input, .form-group select {
+            flex: 1;
+            padding: 12px 18px;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: #022b40;
+            outline: none;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .radio-group label {
+            min-width: auto;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        button {
+            background: #ff8800;
+            border: none;
+            padding: 18px 30px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border-radius: 60px;
+            color: #00263b;
+            border-bottom: 6px solid #bb5500;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.1s;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0099ff;
+            border-bottom-color: #0059a3;
+            color: white;
+        }
+        .admin-section {
+            background: #11212e;
+            border-radius: 30px;
+            padding: 25px;
+            border: 3px solid #ffaa33;
+            color: #e2f0ff;
+        }
+        .admin-login-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .admin-login-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: 2px solid #ffaa33;
+            background: #1e3b4b;
+            color: white;
+            font-size: 1rem;
+        }
+        .admin-login-form button {
+            width: auto;
+            padding: 15px 30px;
+            margin: 0;
+            background: #3aa8ff;
+            border-bottom-color: #1a5b8c;
+        }
+        .applications-list {
+            background: #0a1f2c;
+            border-radius: 30px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .app-item {
+            background: #1c3f52;
+            border-left: 10px solid #ff8800;
+            border-right: 5px solid #0099ff;
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            color: #eef9ff;
+            word-break: break-word;
+        }
+        .app-item small {
+            color: #ffaa33;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .warning {
+            background: #ffb347;
+            color: #001c28;
+            padding: 10px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎮 MEDIA ADMIN</h1>
+        <div class="sub">✧ ПОДАЧА ЗАЯВКИ (регистрация не нужна) ✧</div>
+
+        <!-- Форма заявки (доступна всем) -->
+        <form id="applyForm">
+            <div class="form-group">
+                <label>🔸 Ваш крутой ник</label>
+                <input type="text" id="nick" placeholder="твой ник" required>
+            </div>
+            <div class="form-group">
+                <label>🔸 Сколько лет</label>
+                <input type="number" id="age" placeholder="возраст" required>
+            </div>
+            <div class="form-group">
+                <label>🔸 Сколько см в жопе</label>
+                <input type="text" id="butt" placeholder="честно, в см" required>
+            </div>
+            <div class="form-group">
+                <label>🔸 Любишь читеров?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="cheater" value="Да, банить" required> ✅ Да, банить</label>
+                    <label><input type="radio" name="cheater" value="Нет, сам чит"> ❌ Нет, сам чит</label>
+                    <label><input type="radio" name="cheater" value="Иногда"> 🤡 Иногда</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>🔸 Ты долбаеб?</label>
+                <select id="dumb" required>
+                    <option value="" disabled selected>— выбери —</option>
+                    <option value="нет, я адекват">нет, я адекват</option>
+                    <option value="да, иногда">да, иногда</option>
+                    <option value="критично, но лечится">критично, но лечится</option>
+                    <option value="как de_vstvenik">как de_vstvenik</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>🔸 Лайтрум?</label>
+                <select id="lightroom" required>
+                    <option value="" disabled selected>— есть лайтрум? —</option>
+                    <option value="есть премиум">📸 есть, премиум</option>
+                    <option value="нет, я кс го">🚫 нет, я кс го</option>
+                    <option value="что это вообще">что это вообще</option>
+                </select>
+            </div>
+            <button type="button" id="submitApply">🚀 ОТПРАВИТЬ ЗАЯВКУ</button>
+        </form>
+
+        <div style="height:4px; background:linear-gradient(90deg,#ff8000,#0099ff); margin:30px 0;"></div>
+
+        <!-- АДМИН-ПАНЕЛЬ (скрыта за паролем) -->
+        <div class="admin-section">
+            <h2 style="color:#ffaa33; text-align:center;">🔐 АДМИН-ПАНЕЛЬ</h2>
+            
+            <!-- Форма входа (пароль 567567gghh) -->
+            <div id="adminLoginForm">
+                <div class="admin-login-form">
+                    <input type="password" id="adminPass" placeholder="введи пароль админа">
+                    <button id="loginAdminBtn">ВОЙТИ</button>
+                </div>
+                <div class="warning">⚡ только для de_vstvenik (пароль знает он)</div>
+            </div>
+
+            <!-- Сама админка (видна после входа) -->
+            <div id="adminPanel" class="hidden">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="color:#3aa8ff;">📋 ПОСТУПИВШИЕ ЗАЯВКИ</h3>
+                    <button id="logoutAdmin" style="width:auto; padding:10px 20px; background:#445566;">🚪 выход</button>
+                </div>
+                <div id="applicationsContainer" class="applications-list">
+                    <!-- сюда будут грузиться заявки -->
+                </div>
+                <p style="text-align:center; margin-top:15px; color:#8899aa;" id="appsCount"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- ХРАНИЛИЩЕ ЗАЯВОК (localStorage) ----------
+        let applications = JSON.parse(localStorage.getItem('media_applications')) || [];
+
+        // Функция сохранения
+        function saveApps() {
+            localStorage.setItem('media_applications', JSON.stringify(applications));
+        }
+
+        // Функция отображения заявок в админке
+        function renderApplications() {
+            const container = document.getElementById('applicationsContainer');
+            const countSpan = document.getElementById('appsCount');
+            if (!container) return;
+            
+            if (applications.length === 0) {
+                container.innerHTML = '<div class="warning" style="background:#334455;">😴 пока нет заявок</div>';
+                if (countSpan) countSpan.innerText = 'всего заявок: 0';
+                return;
+            }
+
+            let html = '';
+            // показываем от новых к старым (перевернём массив)
+            [...applications].reverse().forEach((app, index) => {
+                html += `
+                    <div class="app-item">
+                        <small>#${applications.length - index} | ${app.date || 'только что'}</small><br>
+                        <strong>🤡 ник:</strong> ${app.nick}<br>
+                        <strong>📅 лет:</strong> ${app.age}<br>
+                        <strong>📏 см в жопе:</strong> ${app.butt}<br>
+                        <strong>💢 читеры:</strong> ${app.cheater}<br>
+                        <strong>🧠 долбаеб:</strong> ${app.dumb}<br>
+                        <strong>📸 лайтрум:</strong> ${app.lightroom}<br>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            if (countSpan) countSpan.innerText = `всего заявок: ${applications.length}`;
+        }
+
+        // ---------- ОТПРАВКА ЗАЯВКИ (без регистрации) ----------
+        document.getElementById('submitApply').addEventListener('click', function() {
+            // собираем данные
+            const nick = document.getElementById('nick').value.trim();
+            const age = document.getElementById('age').value.trim();
+            const butt = document.getElementById('butt').value.trim();
+            const cheater = document.querySelector('input[name="cheater"]:checked');
+            const dumb = document.getElementById('dumb').value;
+            const lightroom = document.getElementById('lightroom').value;
+
+            if (!nick || !age || !butt || !cheater || !dumb || !lightroom) {
+                alert('❌ Заполни все поля, бро!');
+                return;
+            }
+
+            // создаём заявку
+            const newApp = {
+                nick: nick,
+                age: age,
+                butt: butt,
+                cheater: cheater.value,
+                dumb: dumb,
+                lightroom: lightroom,
+                date: new Date().toLocaleString('ru-RU', {hour12: false})
+            };
+
+            applications.push(newApp);
+            saveApps();
+            renderApplications(); // если админка открыта, обновится
+
+            alert('✅ Заявка отправлена! Админ скоро глянет.');
+
+            // очищаем форму
+            document.getElementById('applyForm').reset();
+        });
+
+        // ---------- АДМИН: ЛОГИН (пароль 567567gghh) ----------
+        document.getElementById('loginAdminBtn').addEventListener('click', function() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === '567567gghh') {
+                // скрываем форму логина, показываем админ-панель
+                document.getElementById('adminLoginForm').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                renderApplications(); // показать заявки
+            } else {
+                alert('❌ Неверный пароль! Только настоящий de_vstvenik знает код.');
+            }
+        });
+
+        // выход из админки
+        document.getElementById('logoutAdmin').addEventListener('click', function() {
+            document.getElementById('adminLoginForm').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('adminPass').value = ''; // очистка поля
+        });
+
+        // если захочешь сразу видеть админку при разработке (раскомментируй)
+        // но для продакшена убрать
+        // (можно оставить закомментированным)
+        // window.onload = function() {
+        //     document.getElementById('adminLoginForm').classList.add('hidden');
+        //     document.getElementById('adminPanel').classList.remove('hidden');
+        //     renderApplications();
+        // }
+
+        // небольшая хитрость: если нажать Enter в поле пароля
+        document.getElementById('adminPass').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginAdminBtn').click();
+            }
+        });
+
+        // инициализация: если вдруг уже были заявки в localStorage, они отобразятся после логина
+        // но можно не рендерить сразу, только после входа
+    </script>
+    <footer style="color:#7ab3cc;">просто сайт • заявки хранятся в браузере (localStorage)</footer>
+</body>
+</html>
